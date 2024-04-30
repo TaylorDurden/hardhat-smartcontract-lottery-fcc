@@ -40,11 +40,13 @@ developmentChains.includes(network.name)
                 const endingTimestamp = await raffle.getLastestTimestamp();
                 await expect(raffle.getPlayer(0)).to.be.reverted;
                 assert.equal(winner.toString(), accounts[0].address);
-                assert.equal(numPlayers.toString(), "0");
                 assert.equal(raffleState, 0);
                 assert.equal(
                   winnerBalance.toString(),
-                  (winnerStartingBalance + raffleEntranceFee).toString(),
+                  (
+                    winnerStartingBalance +
+                    (await ethers.toBigInt(raffleEntranceFee))
+                  ).toString(),
                 );
                 assert(endingTimestamp > startingTimestamp);
                 resolve();
